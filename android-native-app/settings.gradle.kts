@@ -1,16 +1,30 @@
 import java.io.File
 
 pluginManagement {
-    val rnGradlePluginPath = File(rootDir.parentFile, "node_modules/@react-native/gradle-plugin")
-    if (rnGradlePluginPath.exists()) {
-        includeBuild(rnGradlePluginPath.absolutePath)
-    }
+    val rnGradlePluginPath = File(
+        providers.exec {
+            workingDir(rootDir.parentFile)
+            commandLine(
+                "node",
+                "--print",
+                "require.resolve('@react-native/gradle-plugin/package.json', { paths: [require.resolve('react-native/package.json')] })"
+            )
+        }.standardOutput.asText.get().trim()
+    ).parentFile.absolutePath
+    includeBuild(rnGradlePluginPath)
 
-    val expoAutolinkingPath = File(rootDir.parentFile, "node_modules/expo-modules-autolinking")
-    val expoGradlePluginPath = File(expoAutolinkingPath, "android/expo-gradle-plugin")
-    if (expoGradlePluginPath.exists()) {
-        includeBuild(expoGradlePluginPath.absolutePath)
-    }
+    val expoAutolinkingPath = File(
+        providers.exec {
+            workingDir(rootDir.parentFile)
+            commandLine(
+                "node",
+                "--print",
+                "require.resolve('expo-modules-autolinking/package.json', { paths: [require.resolve('expo/package.json')] })"
+            )
+        }.standardOutput.asText.get().trim()
+    )
+    val expoGradlePluginPath = File(expoAutolinkingPath, "../android/expo-gradle-plugin").absolutePath
+    includeBuild(expoGradlePluginPath)
 
     repositories {
         google()
@@ -24,6 +38,8 @@ plugins {
     id("expo-autolinking-settings")
 }
 
+expoAutolinking.projectRoot = rootDir.parentFile
+
 extensions.configure<com.facebook.react.ReactSettingsExtension> {
     autolinkLibrariesFromCommand(expoAutolinking.rnConfigCommand)
 }
@@ -32,4 +48,4 @@ expoAutolinking.useExpoVersionCatalog()
 
 rootProject.name = "MyApp"
 include(":app")
-includeBuild("../node_modules/@react-native/gradle-plugin")
+includeBuild(expoAutolinking.reactNativeGradlePlugin)

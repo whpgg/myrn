@@ -13,12 +13,14 @@ configure<com.facebook.react.ReactExtension> {
     entryFile.set(file("$hostProjectRoot/index.js"))
     reactNativeDir.set(file("$hostProjectRoot/node_modules/react-native"))
     codegenDir.set(file("$hostProjectRoot/node_modules/@react-native/codegen"))
+    // Also bundle JS for debug so RN container doesn't depend on Metro.
+    debuggableVariants.set(listOf())
     autolinkLibrariesWithApp()
 }
 
 android {
     namespace = "com.example.myapp"
-    compileSdk = 34
+    compileSdk = 36
     ndkVersion = "27.1.12297006"
 
     defaultConfig {
@@ -44,12 +46,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
     buildFeatures {
