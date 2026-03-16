@@ -1,7 +1,7 @@
 package com.example.myapp
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.myapp.databinding.ActivityMainBinding
 
@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnClick.setOnClickListener {
-            Toast.makeText(this, "按钮被点击了！", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, RNContainerActivity::class.java))
         }
     }
 }
