@@ -39,3 +39,20 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Android native app local/build files
+/android-native-app/.gradle/
+/android-native-app/build/
+/android-native-app/app/build/
+/android-native-app/local.properties
+*.iml
+
+# Android packages and archives
+*.apk
+*.aab
+*.ap_
+*.zip
+
+# Common logs / native crash outputs
+*.log
+*.hprof
